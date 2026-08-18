@@ -649,6 +649,146 @@ img {
     margin-bottom: 0;
 }
 
+/* --- FAQ (Accordion) --- */
+.faq__list {
+    max-width: 860px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.faq__item {
+    background-color: var(--text-light-color);
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    overflow: hidden;
+    transition: box-shadow 0.3s ease;
+}
+
+.faq__item:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.faq__button {
+    width: 100%;
+    padding: 24px 30px;
+    background: none;
+    border: none;
+    display: flex;
+    align-items: center;
+    text-align: left;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--primary-color);
+    gap: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.faq__button:hover {
+    background-color: #fcfcfc;
+}
+
+.faq__q-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background-color: var(--primary-color);
+    color: var(--text-light-color);
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.faq__question-text {
+    flex-grow: 1;
+    line-height: 1.5;
+}
+
+.faq__toggle-icon {
+    position: relative;
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+.faq__toggle-icon::before,
+.faq__toggle-icon::after {
+    content: '';
+    position: absolute;
+    background-color: var(--primary-color);
+    border-radius: 2px;
+    transition: transform 0.3s ease;
+}
+
+/* 横棒 */
+.faq__toggle-icon::before {
+    top: 7px;
+    left: 0;
+    width: 16px;
+    height: 2px;
+}
+
+/* 縦棒 */
+.faq__toggle-icon::after {
+    top: 0;
+    left: 7px;
+    width: 2px;
+    height: 16px;
+}
+
+/* 開いたときのアイコン切り替え (＋からーへ) */
+.faq__item.is-open .faq__toggle-icon::after {
+    transform: rotate(90deg);
+    opacity: 0;
+}
+
+.faq__answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s cubic-bezier(0, 1, 0, 1);
+}
+
+.faq__item.is-open .faq__answer {
+    max-height: 1000px;
+    transition: max-height 0.35s cubic-bezier(1, 0, 1, 0);
+}
+
+.faq__answer-inner {
+    padding: 0 30px 24px 30px;
+    display: flex;
+    gap: 16px;
+    border-top: 1px solid #f0f0f0;
+    margin-top: 4px;
+    padding-top: 20px;
+}
+
+.faq__a-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background-color: var(--accent-color);
+    color: var(--text-light-color);
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.faq__answer-text {
+    font-size: 14px;
+    color: #555555;
+    line-height: 1.8;
+    padding-top: 2px;
+}
+
 /* --- Contact CTA --- */
 .contact-cta__inner {
     text-align: center;
@@ -771,14 +911,11 @@ img {
 
 /* =========================================================
    Responsive
-   Breakpoints: PC 1024px〜 / Tablet 768〜1023px / SP 〜767px
    ========================================================= */
 
-/* ---------- Tablet & below (1023px以下): ナビをハンバーガー化 ---------- */
 @media screen and (max-width: 1023px) {
     .inner { padding: 0 30px; }
 
-    /* --- Header / Nav --- */
     .header__contact-btn { display: none; }
     .header__hamburger { display: block; }
 
@@ -819,12 +956,10 @@ img {
 
     .header__nav-item::after { display: none; }
 
-    /* Hamburger icon -> X animation */
     .header__hamburger.is-active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
     .header__hamburger.is-active span:nth-child(2) { opacity: 0; }
     .header__hamburger.is-active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-    /* --- Grids: 2〜3カラム -> 2カラム --- */
     .service__list { grid-template-columns: repeat(2, 1fr); }
     .works__list { grid-template-columns: repeat(2, 1fr); }
     .results__list { grid-template-columns: repeat(3, 1fr); }
@@ -832,11 +967,9 @@ img {
     .casestudy__list { grid-template-columns: 1fr; }
     .casestudy__item { height: auto; min-height: 280px; }
 
-    /* --- FV: 幅が狭くなるので文字サイズを調整 --- */
     .fv__title { font-size: 36px; }
     .fv__text { font-size: 15px; }
 
-    /* --- はみ出し防止 --- */
     .casestudy__item-image { width: 180px; }
     .footer__nav-list { flex-wrap: wrap; }
 }
@@ -845,22 +978,18 @@ body.is-nav-open-body {
     overflow: hidden;
 }
 
-/* ---------- Smartphone (767px以下) ---------- */
 @media screen and (max-width: 767px) {
     :root { --header-height: 60px; }
 
     .inner { padding: 0 20px; }
     .section-padding { padding: 60px 0; }
 
-    /* --- Header --- */
     .header__logo { width: 110px; }
     .header__nav { top: var(--header-height); height: calc(100vh - var(--header-height)); }
 
-    /* --- Buttons --- */
     .btn { padding: 14px 24px; font-size: 14px; }
     .btn--cta { padding: 18px 30px; font-size: 16px; width: 100%; text-align: center; }
 
-    /* --- FV --- */
     .fv__inner {
         flex-direction: column-reverse;
         padding-top: 30px;
@@ -880,19 +1009,15 @@ body.is-nav-open-body {
         display: inline-block;
     }
 
-    /* --- Heading --- */
     .heading__title { font-size: 24px; margin-bottom: 40px; }
     .heading__text { font-size: 14px; margin-bottom: 40px; }
 
-    /* --- Service --- */
     .service__list { grid-template-columns: 1fr; }
     .service__item { padding: 30px; }
 
-    /* --- Works --- */
     .works__tab-list { flex-wrap: wrap; gap: 15px 20px; }
     .works__list { grid-template-columns: 1fr; }
 
-    /* --- Case Study --- */
     .casestudy__item {
         height: auto;
         min-height: 260px;
@@ -904,22 +1029,40 @@ body.is-nav-open-body {
         right: -20px;
     }
 
-    /* --- Results --- */
     .results__list { grid-template-columns: repeat(2, 1fr); gap: 12px; }
     .results__item { padding: 15px; }
     .results__item-value { font-size: 26px; }
 
-    /* --- About --- */
     .about__inner { grid-template-columns: 1fr; gap: 30px; }
     .about__text { text-align: center; }
     .about__block { padding: 20px; }
 
-    /* --- Contact CTA --- */
+    /* FAQ SP */
+    .faq__button {
+        padding: 18px 20px;
+        font-size: 15px;
+        gap: 12px;
+    }
+
+    .faq__q-icon, .faq__a-icon {
+        width: 26px;
+        height: 26px;
+        font-size: 14px;
+    }
+
+    .faq__answer-inner {
+        padding: 0 20px 20px 20px;
+        gap: 12px;
+    }
+
+    .faq__answer-text {
+        font-size: 13px;
+    }
+
     .contact-cta__title { font-size: 24px; }
     .contact-cta__text { font-size: 14px; }
     .contact-cta__tools-list { gap: 16px 18px; }
 
-    /* --- Footer --- */
     .footer__inner { flex-direction: column; gap: 30px; }
     .footer__right { text-align: left; width: 100%; }
     .footer__nav-list { gap: 12px 20px; margin-bottom: 20px; }
