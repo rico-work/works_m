@@ -6,11 +6,13 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             const href = link.getAttribute('href');
             const target = document.getElementById(href === '#' || href === '' ? 'fv' : href.substring(1));
-            const position = target.offsetTop - 80; // Subtract header height
-            window.scrollTo({
-                top: position,
-                behavior: 'smooth'
-            });
+            if (target) {
+                const position = target.offsetTop - 80; // Subtract header height
+                window.scrollTo({
+                    top: position,
+                    behavior: 'smooth'
+                });
+            }
         });
     }
 
@@ -35,12 +37,14 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.classList.remove('is-nav-open-body');
     };
 
-    hamburger.addEventListener('click', () => {
-        const isOpen = header.classList.toggle('is-nav-open');
-        hamburger.classList.toggle('is-active', isOpen);
-        hamburger.setAttribute('aria-expanded', String(isOpen));
-        document.body.classList.toggle('is-nav-open-body', isOpen);
-    });
+    if (hamburger) {
+        hamburger.addEventListener('click', () => {
+            const isOpen = header.classList.toggle('is-nav-open');
+            hamburger.classList.toggle('is-active', isOpen);
+            hamburger.setAttribute('aria-expanded', String(isOpen));
+            document.body.classList.toggle('is-nav-open-body', isOpen);
+        });
+    }
 
     navLinks.forEach(link => {
         link.addEventListener('click', closeMobileNav);
@@ -66,30 +70,50 @@ document.addEventListener('DOMContentLoaded', () => {
     // 5. Works Section Tabs Filtering
     const tabs = document.querySelectorAll('.works__tab-item');
     const worksList = document.querySelector('.js-works-list');
-    const worksItems = worksList.querySelectorAll('.works__item');
+    
+    if (worksList) {
+        const worksItems = worksList.querySelectorAll('.works__item');
 
-    tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            // Remove active class from other tabs
-            tabs.forEach(t => t.classList.remove('is-active'));
-            tab.classList.add('is-active');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabs.forEach(t => t.classList.remove('is-active'));
+                tab.classList.add('is-active');
 
-            const filter = tab.dataset.filter;
+                const filter = tab.dataset.filter;
 
-            // Fade out the list
-            worksList.style.opacity = '0';
-            
-            setTimeout(() => {
-                worksItems.forEach(item => {
-                    if (filter === 'all' || item.classList.contains(filter)) {
-                        item.style.display = 'block';
-                    } else {
-                        item.style.display = 'none';
-                    }
-                });
-                // Fade back in
-                worksList.style.opacity = '1';
-            }, 300);
+                worksList.style.opacity = '0';
+                
+                setTimeout(() => {
+                    worksItems.forEach(item => {
+                        if (filter === 'all' || item.classList.contains(filter)) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                    worksList.style.opacity = '1';
+                }, 300);
+            });
+        });
+    }
+
+    // 6. FAQ Accordion
+    const faqButtons = document.querySelectorAll('.js-faq-button');
+
+    faqButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const currentItem = button.parentElement;
+            const isOpen = currentItem.classList.contains('is-open');
+
+            // 他の開いているアコーディオンを閉じる（すべて1つずつ開閉させる場合）
+            document.querySelectorAll('.js-faq-item').forEach(item => {
+                item.classList.remove('is-open');
+            });
+
+            // クリックされたアイテムのトグル
+            if (!isOpen) {
+                currentItem.classList.add('is-open');
+            }
         });
     });
 });
